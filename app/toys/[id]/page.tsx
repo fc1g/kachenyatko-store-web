@@ -1,7 +1,39 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { DecorativeShape } from '@/components/decorative-shape';
 import { ToyDetails, ToyDetailsSkeleton } from '@/components/toy/toy-details';
+import { getToy } from '@/lib/api/toys';
+
+const META_DESCRIPTION_MAX_LENGTH = 160;
+const ELLIPSIS = '...';
+
+function truncate(text: string, maxLength: number) {
+	if (text.length <= maxLength) return text;
+	return text.slice(0, maxLength - ELLIPSIS.length).trimEnd() + ELLIPSIS;
+}
+
+export async function generateMetadata({
+	params,
+}: PageProps<'/toys/[id]'>): Promise<Metadata> {
+	const { id } = await params;
+	const toy = await getToy(id);
+	if (!toy) notFound();
+
+	const image = toy.images.toSorted((a, b) => a.position - b.position)[0];
+	const description = truncate(toy.description, META_DESCRIPTION_MAX_LENGTH);
+
+	return {
+		title: toy.name,
+		description,
+		openGraph: {
+			title: toy.name,
+			description,
+			images: image ? [{ url: image.url, alt: toy.name }] : undefined,
+		},
+	};
+}
 
 export default function ToyPage({ params }: PageProps<'/toys/[id]'>) {
 	return (

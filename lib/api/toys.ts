@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { cache } from 'react';
 import { isAxiosError } from 'axios';
 
 import { api, get } from './client';
@@ -17,7 +18,8 @@ export const getToys = (params: GetToysParams = {}) =>
 export const getBestsellers = (limit: number) =>
 	get<Toy[]>('/toys/bestsellers', { limit });
 
-export async function getToy(id: string) {
+// Cached per request so the page and generateMetadata share one call
+export const getToy = cache(async (id: string) => {
 	try {
 		const { data } = await api.get<Toy>(`/toys/${encodeURIComponent(id)}`);
 		return data;
@@ -25,4 +27,4 @@ export async function getToy(id: string) {
 		if (isAxiosError(error) && error.response?.status === 404) return null;
 		throw error;
 	}
-}
+});
