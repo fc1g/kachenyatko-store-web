@@ -17,8 +17,10 @@ import {
 import { createOrder } from './actions';
 import { MESSAGE_MAX_LENGTH, type OrderFormState } from './order-params';
 
-const PHONE_HINT =
-	'We only use your number to talk about this order: no spam, no ads, and we never share it with anyone. Expect a message from us within 24 hours.';
+const PHONE_HINT = [
+	'We only use your number to talk about this order: no spam, no ads, and we never share it with anyone. Expect a message from us within 24 hours.',
+	"We'd be really grateful if this is your Telegram number. No Telegram? Just tell us in the field below which messenger works best for you.",
+];
 
 const initialState: OrderFormState = { status: 'idle' };
 
@@ -77,14 +79,18 @@ export function OrderForm({ toyId }: { toyId?: string }) {
 							render={
 								<button
 									type="button"
-									aria-label={PHONE_HINT}
+									aria-label={PHONE_HINT.join(' ')}
 									className="text-muted-foreground transition-colors hover:text-foreground"
 								/>
 							}
 						>
 							<InfoIcon className="size-4" />
 						</TooltipTrigger>
-						<TooltipContent>{PHONE_HINT}</TooltipContent>
+						<TooltipContent className="max-w-sm flex-col items-start gap-2 px-4 py-3 text-sm">
+							{PHONE_HINT.map(paragraph => (
+								<p key={paragraph}>{paragraph}</p>
+							))}
+						</TooltipContent>
 					</Tooltip>
 				</div>
 				<Input
