@@ -38,6 +38,13 @@ export async function post<T>(path: string, body: unknown): Promise<T> {
 	return data;
 }
 
+export async function postWithCookies<T>(path: string, body: unknown) {
+	const response = await api.post<T>(path, body);
+	const setCookie = [response.headers['set-cookie'] ?? []].flat().join(', ');
+
+	return { data: response.data, setCookie };
+}
+
 export function getErrorStatus(error: unknown) {
 	return isAxiosError(error) ? error.response?.status : undefined;
 }
