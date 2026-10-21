@@ -4,7 +4,7 @@ import Link from "next/link";
 import logo from "@/public/logo.jpg";
 
 import { navLinks } from "./nav-links";
-import { InstagramIcon } from "./instagram-icon";
+import { InstagramIcon } from "@/components/icons/instagram-icon";
 
 // TODO: replace placeholders with real contacts
 const contacts = {
