@@ -39,7 +39,7 @@ export function ProductCard({
 
 	return (
 		<Link
-			href={`/catalog/${toy.id}`}
+			href={`/toys/${toy.id}`}
 			className={cn(
 				cardClassName(color, orientation),
 				'transition-transform hover:-translate-y-1',

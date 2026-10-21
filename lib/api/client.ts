@@ -7,7 +7,7 @@ if (!process.env.API_URL) {
 	throw new Error('Missing environment variable: API_URL');
 }
 
-const api = axios.create({
+export const api = axios.create({
 	baseURL: process.env.API_URL,
 	adapter: 'fetch',
 });
