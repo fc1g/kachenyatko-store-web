@@ -13,6 +13,7 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from '@/components/ui/carousel';
+import { Skeleton } from '@/components/ui/skeleton';
 import type { Toy } from '@/lib/api/types';
 
 export function ToyGallery({ toy }: { toy: Pick<Toy, 'name' | 'images'> }) {
@@ -102,6 +103,26 @@ export function ToyGallery({ toy }: { toy: Pick<Toy, 'name' | 'images'> }) {
 					</div>
 				</div>
 			)}
+		</div>
+	);
+}
+
+const THUMBNAILS_COUNT = 5;
+
+export function ToyGallerySkeleton() {
+	return (
+		<div className="flex flex-col gap-4">
+			<Skeleton className="aspect-square rounded-lg" />
+
+			<div className="p-1">
+				<div className="-ml-3 flex">
+					{Array.from({ length: THUMBNAILS_COUNT }, (_, i) => (
+						<div key={i} className="min-w-0 shrink-0 basis-1/5 pl-3">
+							<Skeleton className="aspect-square rounded-lg" />
+						</div>
+					))}
+				</div>
+			</div>
 		</div>
 	);
 }

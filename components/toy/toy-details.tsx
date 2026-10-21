@@ -6,7 +6,7 @@ import { getToy } from '@/lib/api/toys';
 import { RelatedToys, RelatedToysSkeleton } from './related-toys';
 import { ToyBreadcrumbs } from './toy-breadcrumbs';
 import { ToyDescription } from './toy-description';
-import { ToyGallery } from './toy-gallery';
+import { ToyGallery, ToyGallerySkeleton } from './toy-gallery';
 
 export async function ToyDetails({ id }: { id: string }) {
 	const toy = await getToy(id);
@@ -57,7 +57,7 @@ export function ToyDetailsSkeleton() {
 			<Skeleton className="h-5 w-64" />
 
 			<div className="grid gap-10 md:grid-cols-2">
-				<Skeleton className="aspect-square rounded-lg" />
+				<ToyGallerySkeleton />
 
 				<div className="flex flex-col gap-10">
 					<Skeleton className="h-12 w-3/4" />
