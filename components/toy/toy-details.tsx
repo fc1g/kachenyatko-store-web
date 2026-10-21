@@ -16,7 +16,7 @@ export async function ToyDetails({ id }: { id: string }) {
 
 	const specifications = [
 		{ label: 'Size', value: toy.size },
-		{ label: 'Material', value: toy.materials },
+		{ label: 'Materials', value: toy.materials },
 	];
 
 	return (
