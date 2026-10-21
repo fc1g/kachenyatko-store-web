@@ -2,7 +2,7 @@ import { About } from '@/components/home/about';
 import { Bestsellers } from '@/components/home/bestsellers';
 import { CustomOrder } from '@/components/home/custom-order';
 import { Hero } from '@/components/home/hero';
-import { NewProducts } from '@/components/home/new-products';
+import { NewArrivals } from '@/components/home/new-arrivals';
 
 export default function Home() {
 	return (
@@ -10,7 +10,7 @@ export default function Home() {
 			<Hero />
 			<Bestsellers />
 			<About />
-			<NewProducts />
+			<NewArrivals />
 			<CustomOrder />
 		</>
 	);

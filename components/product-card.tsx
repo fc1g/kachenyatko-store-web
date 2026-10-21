@@ -2,14 +2,32 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from 'cn';
 
+import { Skeleton } from '@/components/ui/skeleton';
 import type { Toy } from '@/lib/api/types';
 import { brandBgClasses, type BrandColor } from '@/lib/brand-colors';
+
+type Orientation = 'vertical' | 'horizontal';
 
 type ProductCardProps = {
 	toy: Pick<Toy, 'id' | 'name' | 'description' | 'images'>;
 	color: BrandColor;
-	orientation?: 'vertical' | 'horizontal';
+	orientation?: Orientation;
 };
+
+function cardClassName(color: BrandColor, orientation: Orientation) {
+	return cn(
+		'flex flex-col gap-6 rounded-lg p-6 shadow-sm',
+		orientation === 'horizontal' && 'sm:flex-row',
+		brandBgClasses[color],
+	);
+}
+
+function imageClassName(orientation: Orientation) {
+	return cn(
+		'relative aspect-square shrink-0 overflow-hidden rounded-lg bg-white/40',
+		orientation === 'horizontal' && 'sm:aspect-4/3 sm:w-1/2',
+	);
+}
 
 export function ProductCard({
 	toy,
@@ -23,17 +41,11 @@ export function ProductCard({
 		<Link
 			href={`/catalog/${toy.id}`}
 			className={cn(
-				'flex flex-col gap-6 rounded-lg p-6 shadow-sm transition-transform hover:-translate-y-1',
-				horizontal && 'sm:flex-row',
-				brandBgClasses[color],
+				cardClassName(color, orientation),
+				'transition-transform hover:-translate-y-1',
 			)}
 		>
-			<div
-				className={cn(
-					'relative aspect-square shrink-0 overflow-hidden rounded-lg bg-white/40',
-					horizontal && 'sm:aspect-4/3 sm:w-1/2',
-				)}
-			>
+			<div className={imageClassName(orientation)}>
 				{image && (
 					<Image
 						src={image.url}
@@ -50,10 +62,10 @@ export function ProductCard({
 			</div>
 
 			<div className="flex flex-col gap-3">
-				<h3 className="text-lg font-semibold">{toy.name}</h3>
+				<h3 className="text-xl font-semibold md:text-2xl">{toy.name}</h3>
 				<p
 					className={cn(
-						'text-sm',
+						'text-base',
 						horizontal ? 'line-clamp-6' : 'line-clamp-3',
 					)}
 				>
@@ -61,5 +73,25 @@ export function ProductCard({
 				</p>
 			</div>
 		</Link>
+	);
+}
+
+export function ProductCardSkeleton({
+	color,
+	orientation = 'vertical',
+}: Omit<ProductCardProps, 'toy'>) {
+	return (
+		<div aria-hidden="true" className={cardClassName(color, orientation)}>
+			<Skeleton className={imageClassName(orientation)} />
+
+			<div className="flex flex-1 flex-col gap-3">
+				<Skeleton className="h-7 w-3/4 bg-white/40 md:h-8" />
+				<div className="flex flex-col gap-1">
+					<Skeleton className="h-5 bg-white/40" />
+					<Skeleton className="h-5 bg-white/40" />
+					<Skeleton className="h-5 w-2/3 bg-white/40" />
+				</div>
+			</div>
+		</div>
 	);
 }
