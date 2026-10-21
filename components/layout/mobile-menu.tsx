@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
+import { cn } from 'cn';
 
 import {
 	Sheet,
@@ -11,7 +13,7 @@ import {
 	SheetTrigger,
 } from '@/components/ui/sheet';
 
-import { navLinks } from './nav-links';
+import { isNavLinkActive, navLinks } from './nav-links';
 
 export function MobileMenu() {
 	return (
@@ -25,22 +27,40 @@ export function MobileMenu() {
 
 			<SheetContent side="right" className="px-6 py-16">
 				<SheetTitle className="sr-only">Menu</SheetTitle>
-				<nav>
-					<ul className="flex flex-col gap-6 text-lg">
-						{navLinks.map(({ href, label }) => (
-							<li key={href}>
-								<SheetClose
-									nativeButton={false}
-									render={<Link href={href} />}
-									className="transition-opacity hover:opacity-70"
-								>
-									{label}
-								</SheetClose>
-							</li>
-						))}
-					</ul>
-				</nav>
+				<MobileNav />
 			</SheetContent>
 		</Sheet>
+	);
+}
+
+function MobileNav() {
+	const pathname = usePathname();
+
+	return (
+		<nav>
+			<ul className="-mx-3 flex flex-col gap-2 text-lg">
+				{navLinks.map(link => {
+					const active = isNavLinkActive(link, pathname);
+
+					return (
+						<li key={link.href}>
+							<SheetClose
+								nativeButton={false}
+								render={<Link href={link.href} />}
+								aria-current={active ? 'page' : undefined}
+								className={cn(
+									'block rounded-md px-3 py-2 transition-colors',
+									active
+										? 'bg-secondary text-secondary-foreground'
+										: 'hover:bg-muted',
+								)}
+							>
+								{link.label}
+							</SheetClose>
+						</li>
+					);
+				})}
+			</ul>
+		</nav>
 	);
 }

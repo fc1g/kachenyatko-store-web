@@ -1,7 +1,8 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 
+import { HeaderNav, HeaderNavList } from './header-nav';
 import { MobileMenu } from './mobile-menu';
-import { navLinks } from './nav-links';
 
 export function Header() {
 	return (
@@ -12,18 +13,9 @@ export function Header() {
 				</Link>
 
 				<nav className="hidden md:block">
-					<ul className="flex items-center gap-10 text-sm lg:gap-14">
-						{navLinks.map(({ href, label }) => (
-							<li key={href}>
-								<Link
-									href={href}
-									className="transition-opacity hover:opacity-70"
-								>
-									{label}
-								</Link>
-							</li>
-						))}
-					</ul>
+					<Suspense fallback={<HeaderNavList pathname={null} />}>
+						<HeaderNav />
+					</Suspense>
 				</nav>
 
 				<MobileMenu />
