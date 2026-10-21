@@ -6,9 +6,8 @@ import { SectionMessage } from '@/components/section-message';
 import { getToys } from '@/lib/api/toys';
 import type { BrandColor } from '@/lib/brand-colors';
 
+import { DEFAULT_LIMIT } from './catalog-params';
 import { CatalogPagination } from './catalog-pagination';
-
-const PAGE_SIZE = 9;
 
 const colors: BrandColor[] = [
 	'pink',
@@ -22,29 +21,33 @@ const colors: BrandColor[] = [
 	'pink',
 ];
 
-export function parsePage(value: string | string[] | undefined) {
-	const page = Number(value);
-	return Number.isInteger(page) && page > 0 ? page : 1;
-}
-
 type CatalogToysProps = {
 	page: number;
+	limit: number;
 	basePath: string;
 	category?: string;
 };
 
 export function CatalogToys(props: CatalogToysProps) {
 	return (
-		<Suspense key={props.page} fallback={<CatalogToysSkeleton />}>
+		<Suspense
+			key={`${props.page}-${props.limit}`}
+			fallback={<CatalogToysSkeleton count={props.limit} />}
+		>
 			<CatalogToysList {...props} />
 		</Suspense>
 	);
 }
 
-async function CatalogToysList({ page, basePath, category }: CatalogToysProps) {
+async function CatalogToysList({
+	page,
+	limit,
+	basePath,
+	category,
+}: CatalogToysProps) {
 	const result = await getToys({
-		limit: PAGE_SIZE,
-		offset: (page - 1) * PAGE_SIZE,
+		limit,
+		offset: (page - 1) * limit,
 		category,
 	});
 
@@ -75,17 +78,18 @@ async function CatalogToysList({ page, basePath, category }: CatalogToysProps) {
 
 			<CatalogPagination
 				page={page}
-				totalPages={Math.ceil(result.total / PAGE_SIZE)}
+				limit={limit}
+				totalPages={Math.ceil(result.total / limit)}
 				basePath={basePath}
 			/>
 		</div>
 	);
 }
 
-export function CatalogToysSkeleton() {
+export function CatalogToysSkeleton({ count = DEFAULT_LIMIT }) {
 	return (
 		<ToysGrid>
-			{Array.from({ length: PAGE_SIZE }, (_, i) => (
+			{Array.from({ length: count }, (_, i) => (
 				<ProductCardSkeleton key={i} color={colors[i % colors.length]} />
 			))}
 		</ToysGrid>

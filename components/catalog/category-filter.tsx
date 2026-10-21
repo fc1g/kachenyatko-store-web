@@ -2,7 +2,7 @@
 
 import { use } from 'react';
 import Link from 'next/link';
-import { useSelectedLayoutSegment } from 'next/navigation';
+import { useSearchParams, useSelectedLayoutSegment } from 'next/navigation';
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 import { cn } from 'cn';
 
@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { ToyCategory } from '@/lib/api/types';
+
+import { catalogHref, parseLimit } from './catalog-params';
 
 const SKELETON_ITEMS_COUNT = 5;
 
@@ -30,11 +32,16 @@ type CategoryFilterProps = {
 export function CategoryFilter({ categories }: CategoryFilterProps) {
 	const list = use(categories);
 	const activeSlug = useSelectedLayoutSegment();
+	const limit = parseLimit(useSearchParams().get('limit'));
 
 	const items: FilterItem[] = [
-		{ href: '/catalog', label: 'All toys', active: activeSlug === null },
+		{
+			href: catalogHref('/catalog', { limit }),
+			label: 'All toys',
+			active: activeSlug === null,
+		},
 		...(list ?? []).map(category => ({
-			href: `/catalog/${category.slug}`,
+			href: catalogHref(`/catalog/${category.slug}`, { limit }),
 			label: category.name,
 			active: category.slug === activeSlug,
 		})),

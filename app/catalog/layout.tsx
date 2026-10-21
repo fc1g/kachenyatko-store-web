@@ -5,6 +5,10 @@ import {
 	CategoryFilter,
 	CategoryFilterSkeleton,
 } from '@/components/catalog/category-filter';
+import {
+	LimitPicker,
+	LimitPickerSkeleton,
+} from '@/components/catalog/limit-picker';
 import { DecorativeShape } from '@/components/decorative-shape';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getCategories } from '@/lib/api/categories';
@@ -28,9 +32,14 @@ export default function CatalogLayout({ children }: LayoutProps<'/catalog'>) {
 					<CatalogBreadcrumbs categories={categories} />
 				</Suspense>
 
-				<h1 className="text-[2.5rem]/tight font-extrabold md:text-[3.5rem]/tight">
-					Catalog
-				</h1>
+				<div className="flex items-center justify-between gap-4">
+					<h1 className="text-[2.5rem]/tight font-extrabold md:text-[3.5rem]/tight">
+						Catalog
+					</h1>
+					<Suspense fallback={<LimitPickerSkeleton />}>
+						<LimitPicker />
+					</Suspense>
+				</div>
 
 				<div className="grid items-start gap-8 lg:grid-cols-[18rem_1fr]">
 					<Suspense fallback={<CategoryFilterSkeleton />}>

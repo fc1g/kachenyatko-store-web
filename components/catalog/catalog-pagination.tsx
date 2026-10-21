@@ -9,23 +9,27 @@ import {
 	PaginationLink,
 } from '@/components/ui/pagination';
 
+import { catalogHref } from './catalog-params';
+
 // Pages shown on each side of the current one before collapsing into "..."
 const SIBLINGS = 1;
 
 type CatalogPaginationProps = {
 	page: number;
+	limit: number;
 	totalPages: number;
 	basePath: string;
 };
 
 export function CatalogPagination({
 	page,
+	limit,
 	totalPages,
 	basePath,
 }: CatalogPaginationProps) {
 	if (totalPages <= 1) return null;
 
-	const href = (n: number) => (n === 1 ? basePath : `${basePath}?page=${n}`);
+	const href = (n: number) => catalogHref(basePath, { page: n, limit });
 
 	return (
 		<Pagination>
