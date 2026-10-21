@@ -1,5 +1,7 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getToy } from '@/lib/api/toys';
 
@@ -25,7 +27,16 @@ export async function ToyDetails({ id }: { id: string }) {
 				<ToyGallery toy={toy} />
 
 				<div className="flex flex-col gap-10">
-					<h1 className="text-[2.5rem]/tight font-bold">{toy.name}</h1>
+					<div className="flex flex-col items-start gap-6">
+						<h1 className="text-[2.5rem]/tight font-bold">{toy.name}</h1>
+						<Button
+							nativeButton={false}
+							render={<Link href={`/toys/${toy.id}/order`} />}
+							className="h-12 px-6 text-lg"
+						>
+							Order this toy
+						</Button>
+					</div>
 
 					<section className="flex flex-col gap-4">
 						<h2 className="text-2xl font-semibold">Description</h2>
@@ -60,7 +71,10 @@ export function ToyDetailsSkeleton() {
 				<ToyGallerySkeleton />
 
 				<div className="flex flex-col gap-10">
-					<Skeleton className="h-12 w-3/4" />
+					<div className="flex flex-col gap-6">
+						<Skeleton className="h-12 w-3/4" />
+						<Skeleton className="h-12 w-44" />
+					</div>
 					<div className="flex flex-col gap-4">
 						<Skeleton className="h-8 w-40" />
 						<Skeleton className="h-6" />

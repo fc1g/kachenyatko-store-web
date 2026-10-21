@@ -1,4 +1,7 @@
+import Link from 'next/link';
 import { Dog } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 
 export function CustomOrder() {
 	return (
@@ -22,6 +25,14 @@ export function CustomOrder() {
 						soon as it is prepared.
 					</p>
 				</div>
+
+				<Button
+					nativeButton={false}
+					render={<Link href="/orders/custom" />}
+					className="mt-8 h-12 px-6 text-lg"
+				>
+					Order a custom toy
+				</Button>
 			</div>
 		</section>
 	);

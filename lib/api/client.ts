@@ -32,3 +32,18 @@ export async function getOne<T>(path: string): Promise<T | null> {
 		throw error;
 	}
 }
+
+export async function post<T>(path: string, body: unknown): Promise<T> {
+	const { data } = await api.post<T>(path, body);
+	return data;
+}
+
+export function getErrorStatus(error: unknown) {
+	return isAxiosError(error) ? error.response?.status : undefined;
+}
+
+export function getErrorMessage(error: unknown) {
+	return isAxiosError<{ message?: string }>(error)
+		? error.response?.data?.message
+		: undefined;
+}
