@@ -19,7 +19,13 @@ export function ToyBreadcrumbs({
 		<Breadcrumb>
 			<BreadcrumbList>
 				<BreadcrumbItem>
-					<BreadcrumbLink render={<Link href="/" />}>Home</BreadcrumbLink>
+					<BreadcrumbLink render={<Link href="/" />}>Store</BreadcrumbLink>
+				</BreadcrumbItem>
+				<BreadcrumbSeparator />
+				<BreadcrumbItem>
+					<BreadcrumbLink render={<Link href="/catalog" />}>
+						Catalog
+					</BreadcrumbLink>
 				</BreadcrumbItem>
 				<BreadcrumbSeparator />
 				<BreadcrumbItem>
