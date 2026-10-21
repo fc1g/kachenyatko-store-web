@@ -25,7 +25,7 @@ export function NewArrivals() {
 }
 
 async function NewArrivalsList() {
-	const toys = await getToys({ limit: COUNT });
+	const toys = (await getToys({ limit: COUNT }))?.items;
 
 	if (!toys) {
 		return (

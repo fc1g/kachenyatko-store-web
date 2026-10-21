@@ -24,3 +24,8 @@ export type Toy = {
 	created_at: string;
 	updated_at: string;
 };
+
+export type Paginated<T> = {
+	items: T[];
+	total: number;
+};

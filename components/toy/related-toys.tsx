@@ -17,12 +17,11 @@ export function RelatedToys({ toy }: { toy: Pick<Toy, 'id' | 'category'> }) {
 }
 
 async function RelatedToysList({ toy }: { toy: Pick<Toy, 'id' | 'category'> }) {
-	// One extra in case the current toy is among the results
 	const toys = await getToys({
 		limit: COUNT + 1,
 		category: toy.category.slug,
 	});
-	const related = toys?.filter(t => t.id !== toy.id).slice(0, COUNT);
+	const related = toys?.items.filter(t => t.id !== toy.id).slice(0, COUNT);
 
 	if (!related?.length) return null;
 
