@@ -20,15 +20,17 @@ export function isTokenExpired(token: string) {
 	return exp === null || exp * 1000 <= Date.now();
 }
 
+const REDIRECT_BASE = 'http://local';
+
 export function safeRedirectPath(value: unknown, fallback = '/') {
-	if (typeof value !== 'string') return fallback;
-	if (
-		!value.startsWith('/') ||
-		value.startsWith('//') ||
-		value.startsWith('/\\')
-	) {
+	if (typeof value !== 'string' || !value.startsWith('/')) return fallback;
+
+	try {
+		const url = new URL(value, REDIRECT_BASE);
+		if (url.origin !== REDIRECT_BASE) return fallback;
+
+		return url.pathname + url.search + url.hash;
+	} catch {
 		return fallback;
 	}
-
-	return value;
 }
