@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 
+import { ErrorBoundary } from '@/components/error-boundary';
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card';
 import { SectionMessage } from '@/components/section-message';
 import { getToys } from '@/lib/api/toys';
@@ -15,9 +16,17 @@ export function NewArrivals() {
 				</h2>
 
 				<div className="mt-10 grid gap-6 lg:grid-cols-2">
-					<Suspense fallback={<NewArrivalsSkeleton />}>
-						<NewArrivalsList />
-					</Suspense>
+					<ErrorBoundary
+						fallback={
+							<SectionMessage>
+								Couldn&apos;t load new arrivals. Please try again later.
+							</SectionMessage>
+						}
+					>
+						<Suspense fallback={<NewArrivalsSkeleton />}>
+							<NewArrivalsList />
+						</Suspense>
+					</ErrorBoundary>
 				</div>
 			</div>
 		</section>
@@ -25,15 +34,7 @@ export function NewArrivals() {
 }
 
 async function NewArrivalsList() {
-	const toys = (await getToys({ limit: COUNT }))?.items;
-
-	if (!toys) {
-		return (
-			<SectionMessage>
-				Couldn&apos;t load new arrivals. Please try again later.
-			</SectionMessage>
-		);
-	}
+	const { items: toys } = await getToys({ limit: COUNT });
 
 	if (toys.length === 0) {
 		return (

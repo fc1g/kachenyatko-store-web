@@ -1,6 +1,7 @@
 import { type ReactNode, Suspense } from 'react';
 import { notFound } from 'next/navigation';
 
+import { ErrorBoundary } from '@/components/error-boundary';
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card';
 import { SectionMessage } from '@/components/section-message';
 import { getToys } from '@/lib/api/toys';
@@ -30,12 +31,20 @@ type CatalogToysProps = {
 
 export function CatalogToys(props: CatalogToysProps) {
 	return (
-		<Suspense
-			key={`${props.page}-${props.limit}`}
-			fallback={<CatalogToysSkeleton count={props.limit} />}
+		<ErrorBoundary
+			fallback={
+				<SectionMessage>
+					Couldn&apos;t load toys. Please try again later.
+				</SectionMessage>
+			}
 		>
-			<CatalogToysList {...props} />
-		</Suspense>
+			<Suspense
+				key={`${props.page}-${props.limit}`}
+				fallback={<CatalogToysSkeleton count={props.limit} />}
+			>
+				<CatalogToysList {...props} />
+			</Suspense>
+		</ErrorBoundary>
 	);
 }
 
@@ -50,14 +59,6 @@ async function CatalogToysList({
 		offset: (page - 1) * limit,
 		category,
 	});
-
-	if (!result) {
-		return (
-			<SectionMessage>
-				Couldn&apos;t load toys. Please try again later.
-			</SectionMessage>
-		);
-	}
 
 	if (result.items.length === 0) {
 		if (page > 1) notFound();

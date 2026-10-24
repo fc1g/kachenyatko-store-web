@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 
+import { ErrorBoundary } from '@/components/error-boundary';
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card';
 import { SectionMessage } from '@/components/section-message';
 import { getBestsellers } from '@/lib/api/toys';
@@ -17,9 +18,17 @@ export function Bestsellers() {
 				</h2>
 
 				<div className="mt-10 grid gap-6 md:grid-cols-3">
-					<Suspense fallback={<BestsellersSkeleton />}>
-						<BestsellersList />
-					</Suspense>
+					<ErrorBoundary
+						fallback={
+							<SectionMessage>
+								Couldn&apos;t load bestsellers. Please try again later.
+							</SectionMessage>
+						}
+					>
+						<Suspense fallback={<BestsellersSkeleton />}>
+							<BestsellersList />
+						</Suspense>
+					</ErrorBoundary>
 				</div>
 			</div>
 		</section>
@@ -27,15 +36,7 @@ export function Bestsellers() {
 }
 
 async function BestsellersList() {
-	const toys = await getBestsellers(COUNT);
-
-	if (!toys) {
-		return (
-			<SectionMessage>
-				Couldn&apos;t load bestsellers. Please try again later.
-			</SectionMessage>
-		);
-	}
+	const { items: toys } = await getBestsellers(COUNT);
 
 	if (toys.length === 0) {
 		return (

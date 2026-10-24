@@ -1,12 +1,27 @@
 import 'server-only';
 
-import { cache } from 'react';
+import { cacheLife, cacheTag } from 'next/cache';
 
 import { get, getOne } from './client';
-import type { ToyCategory } from './types';
+import type { Category, Paginated } from './types';
 
-export const getCategories = cache(() => get<ToyCategory[]>('/categories'));
+const CATEGORIES_LIMIT = 100;
 
-export const getCategory = cache((slug: string) =>
-	getOne<ToyCategory>(`/categories/${encodeURIComponent(slug)}`),
-);
+export async function getCategories() {
+	'use cache';
+	cacheLife('hours');
+	cacheTag('categories');
+
+	const page = await get<Paginated<Category>>('/categories', {
+		limit: CATEGORIES_LIMIT,
+	});
+	return page.items;
+}
+
+export async function getCategory(slug: string) {
+	'use cache';
+	cacheLife('hours');
+	cacheTag('categories');
+
+	return getOne<Category>(`/categories/${encodeURIComponent(slug)}`);
+}

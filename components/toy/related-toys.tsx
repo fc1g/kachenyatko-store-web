@@ -1,5 +1,6 @@
 import { Suspense, type ReactNode } from 'react';
 
+import { ErrorBoundary } from '@/components/error-boundary';
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card';
 import { getToys } from '@/lib/api/toys';
 import type { Toy } from '@/lib/api/types';
@@ -10,9 +11,11 @@ const colors: BrandColor[] = ['pink', 'blue', 'yellow'];
 
 export function RelatedToys({ toy }: { toy: Pick<Toy, 'id' | 'category'> }) {
 	return (
-		<Suspense fallback={<RelatedToysSkeleton />}>
-			<RelatedToysList toy={toy} />
-		</Suspense>
+		<ErrorBoundary fallback={null}>
+			<Suspense fallback={<RelatedToysSkeleton />}>
+				<RelatedToysList toy={toy} />
+			</Suspense>
+		</ErrorBoundary>
 	);
 }
 
@@ -21,9 +24,9 @@ async function RelatedToysList({ toy }: { toy: Pick<Toy, 'id' | 'category'> }) {
 		limit: COUNT + 1,
 		category: toy.category.slug,
 	});
-	const related = toys?.items.filter(t => t.id !== toy.id).slice(0, COUNT);
+	const related = toys.items.filter(t => t.id !== toy.id).slice(0, COUNT);
 
-	if (!related?.length) return null;
+	if (!related.length) return null;
 
 	return (
 		<RelatedToysSection>

@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { cache } from 'react';
+import { cacheLife, cacheTag } from 'next/cache';
 
 import { get, getOne } from './client';
 import type { Paginated, Toy } from './types';
@@ -11,12 +11,26 @@ type GetToysParams = {
 	category?: string;
 };
 
-export const getToys = (params: GetToysParams = {}) =>
-	get<Paginated<Toy>>('/toys', params);
+export async function getToys(params: GetToysParams = {}) {
+	'use cache';
+	cacheLife('hours');
+	cacheTag('toys');
 
-export const getBestsellers = (limit: number) =>
-	get<Toy[]>('/toys/bestsellers', { limit });
+	return get<Paginated<Toy>>('/toys', params);
+}
 
-export const getToy = cache((id: string) =>
-	getOne<Toy>(`/toys/${encodeURIComponent(id)}`),
-);
+export async function getBestsellers(limit: number) {
+	'use cache';
+	cacheLife('minutes');
+	cacheTag('toys');
+
+	return get<Paginated<Toy>>('/toys/bestsellers', { limit });
+}
+
+export async function getToy(id: string) {
+	'use cache';
+	cacheLife('hours');
+	cacheTag('toys', `toy:${id}`);
+
+	return getOne<Toy>(`/toys/${encodeURIComponent(id)}`);
+}
