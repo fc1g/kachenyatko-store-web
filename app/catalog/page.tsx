@@ -9,6 +9,7 @@ import {
 
 export const metadata: Metadata = {
 	title: 'Catalog',
+	alternates: { canonical: '/catalog' },
 };
 
 export default function CatalogPage({ searchParams }: PageProps<'/catalog'>) {

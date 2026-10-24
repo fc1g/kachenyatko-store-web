@@ -16,7 +16,10 @@ export async function generateMetadata({
 	const category = await getCategory(categorySlug);
 	if (!category) notFound();
 
-	return { title: category.name };
+	return {
+		title: category.name,
+		alternates: { canonical: `/catalog/${category.slug}` },
+	};
 }
 
 export default function CategoryPage({

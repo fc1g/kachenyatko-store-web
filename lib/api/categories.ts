@@ -7,7 +7,7 @@ import type { Category, Paginated } from './types';
 
 const CATEGORIES_LIMIT = 100;
 
-export async function getCategories() {
+export async function getCategories(): Promise<Category[]> {
 	'use cache';
 	cacheLife('hours');
 	cacheTag('categories');
