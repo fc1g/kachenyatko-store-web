@@ -1,5 +1,6 @@
 export const LIMIT_OPTIONS = [3, 6, 9] as const;
 export const DEFAULT_LIMIT = 9;
+export const MAX_PAGE = 10_000;
 
 type SearchParamValue = string | string[] | null | undefined;
 

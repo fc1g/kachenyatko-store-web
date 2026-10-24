@@ -7,7 +7,7 @@ import { SectionMessage } from '@/components/section-message';
 import { getToys } from '@/lib/api/toys';
 import type { BrandColor } from '@/lib/brand-colors';
 
-import { DEFAULT_LIMIT } from './catalog-params';
+import { DEFAULT_LIMIT, MAX_PAGE } from './catalog-params';
 import { CatalogPagination } from './catalog-pagination';
 
 const colors: BrandColor[] = [
@@ -54,6 +54,8 @@ async function CatalogToysList({
 	basePath,
 	category,
 }: CatalogToysProps) {
+	if (page > MAX_PAGE) notFound();
+
 	const result = await getToys({
 		limit,
 		offset: (page - 1) * limit,
