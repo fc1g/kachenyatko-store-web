@@ -9,6 +9,7 @@ import {
 	LimitPicker,
 	LimitPickerSkeleton,
 } from '@/components/catalog/limit-picker';
+import { ErrorBoundary } from '@/components/error-boundary';
 import { DecorativeShape } from '@/components/decorative-shape';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getCategories } from '@/lib/api/categories';
@@ -28,9 +29,11 @@ export default function CatalogLayout({ children }: LayoutProps<'/catalog'>) {
 			/>
 
 			<div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 md:px-12">
-				<Suspense fallback={<Skeleton className="h-5 w-40" />}>
-					<CatalogBreadcrumbs categories={categories} />
-				</Suspense>
+				<ErrorBoundary fallback={<CatalogBreadcrumbs />}>
+					<Suspense fallback={<Skeleton className="h-5 w-40" />}>
+						<CatalogBreadcrumbs categories={categories} />
+					</Suspense>
+				</ErrorBoundary>
 
 				<div className="flex items-center justify-between gap-4">
 					<h1 className="text-[2.5rem]/tight font-extrabold md:text-[3.5rem]/tight">
@@ -42,9 +45,11 @@ export default function CatalogLayout({ children }: LayoutProps<'/catalog'>) {
 				</div>
 
 				<div className="grid items-start gap-8 lg:grid-cols-[18rem_1fr]">
-					<Suspense fallback={<CategoryFilterSkeleton />}>
-						<CategoryFilter categories={categories} />
-					</Suspense>
+					<ErrorBoundary fallback={<CategoryFilter />}>
+						<Suspense fallback={<CategoryFilterSkeleton />}>
+							<CategoryFilter categories={categories} />
+						</Suspense>
+					</ErrorBoundary>
 					{children}
 				</div>
 			</div>

@@ -15,14 +15,13 @@ import {
 import type { ToyCategory } from '@/lib/api/types';
 
 type CatalogBreadcrumbsProps = {
-	categories: Promise<ToyCategory[] | null>;
+	categories?: Promise<ToyCategory[]>;
 };
 
 export function CatalogBreadcrumbs({ categories }: CatalogBreadcrumbsProps) {
 	const slug = useSelectedLayoutSegment();
-	const category = slug
-		? use(categories)?.find(c => c.slug === slug)
-		: undefined;
+	const category =
+		slug && categories ? use(categories).find(c => c.slug === slug) : undefined;
 
 	return (
 		<Breadcrumb>

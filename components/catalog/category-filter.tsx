@@ -1,6 +1,6 @@
 'use client';
 
-import { use } from 'react';
+import { Suspense, use } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useSelectedLayoutSegment } from 'next/navigation';
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
@@ -17,7 +17,8 @@ import type { ToyCategory } from '@/lib/api/types';
 
 import { catalogHref, parseLimit } from './catalog-params';
 
-const SKELETON_ITEMS_COUNT = 5;
+const SKELETON_ITEMS_COUNT = 4;
+const ALL_TOYS_LABEL = 'All toys';
 
 type FilterItem = {
 	href: string;
@@ -26,21 +27,21 @@ type FilterItem = {
 };
 
 type CategoryFilterProps = {
-	categories: Promise<ToyCategory[] | null>;
+	categories?: Promise<ToyCategory[]>;
 };
 
 export function CategoryFilter({ categories }: CategoryFilterProps) {
-	const list = use(categories);
+	const list = categories ? use(categories) : [];
 	const activeSlug = useSelectedLayoutSegment();
 	const limit = parseLimit(useSearchParams().get('limit'));
 
 	const items: FilterItem[] = [
 		{
 			href: catalogHref('/catalog', { limit }),
-			label: 'All toys',
+			label: ALL_TOYS_LABEL,
 			active: activeSlug === null,
 		},
-		...(list ?? []).map(category => ({
+		...list.map(category => ({
 			href: catalogHref(`/catalog/${category.slug}`, { limit }),
 			label: category.name,
 			active: category.slug === activeSlug,
@@ -55,7 +56,6 @@ export function CategoryFilter({ categories }: CategoryFilterProps) {
 	);
 }
 
-// Small screens: the list would push the toys too far down
 function CategoryDropdown({ items }: { items: FilterItem[] }) {
 	const active = items.find(item => item.active) ?? items[0];
 
@@ -94,18 +94,7 @@ function CategoryList({ items }: { items: FilterItem[] }) {
 			<ul className="flex flex-col gap-1">
 				{items.map(item => (
 					<li key={item.href}>
-						<Link
-							href={item.href}
-							aria-current={item.active ? 'page' : undefined}
-							className={cn(
-								'block rounded-md px-3 py-2 transition-colors',
-								item.active
-									? 'bg-primary font-medium text-primary-foreground'
-									: 'hover:bg-blue/30',
-							)}
-						>
-							{item.label}
-						</Link>
+						<CategoryLink item={item} />
 					</li>
 				))}
 			</ul>
@@ -113,16 +102,49 @@ function CategoryList({ items }: { items: FilterItem[] }) {
 	);
 }
 
+function CategoryLink({ item }: { item: FilterItem }) {
+	return (
+		<Link
+			href={item.href}
+			aria-current={item.active ? 'page' : undefined}
+			className={cn(
+				'block rounded-md px-3 py-2 transition-colors',
+				item.active
+					? 'bg-primary font-medium text-primary-foreground'
+					: 'hover:bg-blue/30',
+			)}
+		>
+			{item.label}
+		</Link>
+	);
+}
+
 export function CategoryFilterSkeleton() {
 	return (
-		<div aria-hidden="true">
-			<Skeleton className="h-11 rounded-lg lg:hidden" />
+		<div>
+			<Skeleton aria-hidden="true" className="h-11 rounded-lg lg:hidden" />
 
-			<div className="hidden min-h-80 flex-col gap-1 rounded-lg bg-blue/25 p-3 lg:flex">
+			<nav
+				aria-label="Categories"
+				className="hidden min-h-80 flex-col gap-1 rounded-lg bg-blue/25 p-3 lg:flex"
+			>
+				<Suspense fallback={<AllToysLink active={false} />}>
+					<ActiveAllToysLink />
+				</Suspense>
 				{Array.from({ length: SKELETON_ITEMS_COUNT }, (_, i) => (
-					<Skeleton key={i} className="h-10 bg-white/50" />
+					<Skeleton key={i} aria-hidden="true" className="h-10 bg-white/50" />
 				))}
-			</div>
+			</nav>
 		</div>
+	);
+}
+
+function ActiveAllToysLink() {
+	return <AllToysLink active={useSelectedLayoutSegment() === null} />;
+}
+
+function AllToysLink({ active }: { active: boolean }) {
+	return (
+		<CategoryLink item={{ href: '/catalog', label: ALL_TOYS_LABEL, active }} />
 	);
 }
