@@ -43,7 +43,7 @@ const detailsField = {
 
 export function OrderForm({ toyId }: { toyId?: string }) {
 	const [state, formAction, pending] = useActionState(
-		createOrder.bind(null, toyId ?? null),
+		createOrder,
 		initialState,
 	);
 	const details = toyId ? detailsField.toy : detailsField.custom;
@@ -73,6 +73,7 @@ export function OrderForm({ toyId }: { toyId?: string }) {
 
 	return (
 		<form action={formAction} className="flex flex-col gap-6">
+			{toyId && <input type="hidden" name="toyId" value={toyId} />}
 			<div className="flex flex-col gap-2">
 				<div className="flex items-center gap-1.5">
 					<Label htmlFor="phone" className="text-base">

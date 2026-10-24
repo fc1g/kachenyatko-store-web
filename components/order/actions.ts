@@ -11,10 +11,10 @@ import {
 } from './order-params';
 
 export async function createOrder(
-	toyId: string | null,
 	_prevState: OrderFormState,
 	formData: FormData,
 ): Promise<OrderFormState> {
+	const toyId = String(formData.get('toyId') ?? '') || null;
 	const values = {
 		phone: String(formData.get('phone') ?? '').trim(),
 		details: String(formData.get('details') ?? '').trim(),
