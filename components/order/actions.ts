@@ -1,6 +1,6 @@
 'use server';
 
-import { getErrorMessage, getErrorStatus } from '@/lib/api/client';
+import { toUserMessage } from '@/lib/api/errors';
 import { createCustomOrder, createToyOrder } from '@/lib/api/orders';
 
 import {
@@ -68,21 +68,16 @@ export async function createOrder(
 		await (toyId ? createToyOrder(toyId, input) : createCustomOrder(input));
 	} catch (error) {
 		console.error('Failed to create order', error);
-		return { status: 'error', error: toUserMessage(error), values };
+		return {
+			status: 'error',
+			error: toUserMessage(error, {
+				NOT_FOUND: 'This toy is no longer available.',
+				TOO_MANY_REQUESTS:
+					"You've placed a lot of orders in a short time. Please try again in a few minutes.",
+			}),
+			values,
+		};
 	}
 
 	return { status: 'success' };
-}
-
-function toUserMessage(error: unknown) {
-	switch (getErrorStatus(error)) {
-		case 404:
-			return 'This toy is no longer available.';
-		case 400:
-			return getErrorMessage(error) ?? 'Please check the form and try again.';
-		case 429:
-			return "You've placed a lot of orders in a short time. Please try again in a few minutes.";
-		default:
-			return 'Something went wrong. Please try again later.';
-	}
 }

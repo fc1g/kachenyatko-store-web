@@ -56,7 +56,7 @@ export type ApiErrorCode =
 	| 'TOO_MANY_REQUESTS'
 	| 'INTERNAL';
 
-export type ApiError = {
+export type ApiErrorBody = {
 	code: ApiErrorCode;
 	message: string;
 };

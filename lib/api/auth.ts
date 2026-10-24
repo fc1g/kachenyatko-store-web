@@ -16,14 +16,14 @@ export type Session = {
 	maxAge: number;
 };
 
-const ACCESS_TOKEN_PATTERN = new RegExp(
-	`(?:^|[,;]\\s*)${ACCESS_TOKEN_COOKIE}=([^,;\\s]+)`,
-);
+const ACCESS_TOKEN_PATTERN = new RegExp(`^${ACCESS_TOKEN_COOKIE}=([^;]+)`);
 
 export async function login(input: LoginInput): Promise<Session> {
-	const { data, setCookie } = await postWithCookies<User>('/login', input);
+	const { data, cookies } = await postWithCookies<User>('/login', input);
 
-	const accessToken = setCookie.match(ACCESS_TOKEN_PATTERN)?.[1];
+	const accessToken = cookies
+		.map(cookie => cookie.match(ACCESS_TOKEN_PATTERN)?.[1])
+		.find(Boolean);
 	const exp = accessToken ? getTokenExpiry(accessToken) : null;
 
 	if (!accessToken || !exp) {

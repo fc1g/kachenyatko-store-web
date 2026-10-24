@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { login } from '@/lib/api/auth';
-import { getErrorMessage, getErrorStatus } from '@/lib/api/client';
+import { toUserMessage } from '@/lib/api/errors';
 import { ACCESS_TOKEN_COOKIE, safeRedirectPath } from '@/lib/auth';
 
 export type LoginFormState = {
@@ -36,21 +36,15 @@ export async function loginAction(
 		});
 	} catch (error) {
 		console.error('Login failed', error);
-		return { error: toUserMessage(error), email };
+		return {
+			error: toUserMessage(error, {
+				UNAUTHORIZED: 'Wrong email or password.',
+				TOO_MANY_REQUESTS:
+					'Too many login attempts. Please wait a minute and try again.',
+			}),
+			email,
+		};
 	}
 
 	redirect(next);
-}
-
-function toUserMessage(error: unknown) {
-	switch (getErrorStatus(error)) {
-		case 401:
-			return 'Wrong email or password.';
-		case 429:
-			return 'Too many login attempts. Please wait a minute and try again.';
-		case 400:
-			return getErrorMessage(error) ?? 'Please check the form and try again.';
-		default:
-			return 'Something went wrong. Please try again later.';
-	}
 }
