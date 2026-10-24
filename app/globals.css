@@ -4,7 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Brand palette. Primary/secondary live in :root as shadcn semantic tokens. */
 @theme {
 	--color-white: #ffffff;
 	--color-black: #0f172a;

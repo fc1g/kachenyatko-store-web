@@ -51,7 +51,6 @@ export function LimitPicker() {
 	);
 }
 
-// Same size as the trigger, shown until the URL is known
 export function LimitPickerSkeleton() {
 	return (
 		<Button variant="ghost" size="icon-lg" disabled aria-label={LABEL}>
