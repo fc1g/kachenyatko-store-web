@@ -5,7 +5,8 @@ import type { Order } from './types';
 
 export type CreateOrderInput = {
 	phone: string;
-	message: string;
+	message?: string;
+	details?: string;
 };
 
 export const createToyOrder = (toyId: string, input: CreateOrderInput) =>

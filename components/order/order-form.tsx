@@ -15,16 +15,20 @@ import {
 } from '@/components/ui/tooltip';
 
 import { createOrder } from './actions';
-import { MESSAGE_MAX_LENGTH, type OrderFormState } from './order-params';
+import {
+	DETAILS_MAX_LENGTH,
+	MESSAGE_MAX_LENGTH,
+	type OrderFormState,
+} from './order-params';
 
 const PHONE_HINT = [
 	'We only use your number to talk about this order: no spam, no ads, and we never share it with anyone. Expect a message from us within 24 hours.',
-	"We'd be really grateful if this is your Telegram number. No Telegram? Just tell us in the field below which messenger works best for you.",
+	"We'd be really grateful if this is your Telegram number. No Telegram? Just tell us in the comment below which messenger works best for you.",
 ];
 
 const initialState: OrderFormState = { status: 'idle' };
 
-const messageField = {
+const detailsField = {
 	toy: {
 		label: 'Order details',
 		placeholder:
@@ -42,7 +46,7 @@ export function OrderForm({ toyId }: { toyId?: string }) {
 		createOrder.bind(null, toyId ?? null),
 		initialState,
 	);
-	const message = toyId ? messageField.toy : messageField.custom;
+	const details = toyId ? detailsField.toy : detailsField.custom;
 
 	if (state.status === 'success') {
 		return (
@@ -111,21 +115,39 @@ export function OrderForm({ toyId }: { toyId?: string }) {
 			</div>
 
 			<div className="flex flex-col gap-2">
+				<Label htmlFor="details" className="text-base">
+					{details.label}
+				</Label>
+				<Textarea
+					id="details"
+					name="details"
+					required={!toyId}
+					maxLength={DETAILS_MAX_LENGTH}
+					placeholder={details.placeholder}
+					defaultValue={error?.values.details}
+					aria-invalid={error?.field === 'details' || undefined}
+					aria-describedby={
+						error?.field === 'details' ? 'order-error' : undefined
+					}
+					className="min-h-32 text-base md:text-base"
+				/>
+			</div>
+
+			<div className="flex flex-col gap-2">
 				<Label htmlFor="message" className="text-base">
-					{message.label}
+					Comment
 				</Label>
 				<Textarea
 					id="message"
 					name="message"
-					required={!toyId}
 					maxLength={MESSAGE_MAX_LENGTH}
-					placeholder={message.placeholder}
+					placeholder="Anything else, e.g. which messenger to reach you in"
 					defaultValue={error?.values.message}
 					aria-invalid={error?.field === 'message' || undefined}
 					aria-describedby={
 						error?.field === 'message' ? 'order-error' : undefined
 					}
-					className="min-h-32 text-base md:text-base"
+					className="min-h-20 text-base md:text-base"
 				/>
 			</div>
 

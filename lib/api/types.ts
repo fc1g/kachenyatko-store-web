@@ -4,6 +4,11 @@ export type ToyCategory = {
 	slug: string;
 };
 
+export type Category = ToyCategory & {
+	created_at: string;
+	updated_at: string;
+};
+
 export type ToyImage = {
 	id: string;
 	toy_id: string;
@@ -34,10 +39,26 @@ export type Order = {
 	id: string;
 	toy_id: string | null;
 	phone: string;
-	message: string;
+	message: string | null;
+	details: string | null;
 	status: 'open' | 'closed';
 	created_at: string;
 	updated_at: string;
+};
+
+export type ApiErrorCode =
+	| 'INVALID'
+	| 'UNAUTHORIZED'
+	| 'FORBIDDEN'
+	| 'NOT_FOUND'
+	| 'CONFLICT'
+	| 'PAYLOAD_TOO_LARGE'
+	| 'TOO_MANY_REQUESTS'
+	| 'INTERNAL';
+
+export type ApiError = {
+	code: ApiErrorCode;
+	message: string;
 };
 
 export type User = {

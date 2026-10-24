@@ -1,4 +1,5 @@
-export const MESSAGE_MAX_LENGTH = 2000;
+export const DETAILS_MAX_LENGTH = 2000;
+export const MESSAGE_MAX_LENGTH = 500;
 
 const E164_PATTERN = /^\+[1-9]\d{7,14}$/;
 
@@ -19,6 +20,6 @@ export type OrderFormState =
 	| {
 			status: 'error';
 			error: string;
-			field?: 'phone' | 'message';
-			values: { phone: string; message: string };
+			field?: 'phone' | 'details' | 'message';
+			values: { phone: string; details: string; message: string };
 	  };

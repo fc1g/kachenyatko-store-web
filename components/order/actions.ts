@@ -4,6 +4,7 @@ import { getErrorMessage, getErrorStatus } from '@/lib/api/client';
 import { createCustomOrder, createToyOrder } from '@/lib/api/orders';
 
 import {
+	DETAILS_MAX_LENGTH,
 	MESSAGE_MAX_LENGTH,
 	normalizePhone,
 	type OrderFormState,
@@ -16,6 +17,7 @@ export async function createOrder(
 ): Promise<OrderFormState> {
 	const values = {
 		phone: String(formData.get('phone') ?? '').trim(),
+		details: String(formData.get('details') ?? '').trim(),
 		message: String(formData.get('message') ?? '').trim(),
 	};
 
@@ -29,11 +31,20 @@ export async function createOrder(
 		};
 	}
 
-	if (!toyId && !values.message) {
+	if (!toyId && !values.details) {
 		return {
 			status: 'error',
-			field: 'message',
+			field: 'details',
 			error: "Please tell us a little about the toy you'd like.",
+			values,
+		};
+	}
+
+	if (values.details.length > DETAILS_MAX_LENGTH) {
+		return {
+			status: 'error',
+			field: 'details',
+			error: `Please keep the description under ${DETAILS_MAX_LENGTH} characters.`,
 			values,
 		};
 	}
@@ -42,12 +53,16 @@ export async function createOrder(
 		return {
 			status: 'error',
 			field: 'message',
-			error: `Please keep the description under ${MESSAGE_MAX_LENGTH} characters.`,
+			error: `Please keep the comment under ${MESSAGE_MAX_LENGTH} characters.`,
 			values,
 		};
 	}
 
-	const input = { phone, message: values.message };
+	const input = {
+		phone,
+		details: values.details || undefined,
+		message: values.message || undefined,
+	};
 
 	try {
 		await (toyId ? createToyOrder(toyId, input) : createCustomOrder(input));
@@ -65,6 +80,8 @@ function toUserMessage(error: unknown) {
 			return 'This toy is no longer available.';
 		case 400:
 			return getErrorMessage(error) ?? 'Please check the form and try again.';
+		case 429:
+			return "You've placed a lot of orders in a short time. Please try again in a few minutes.";
 		default:
 			return 'Something went wrong. Please try again later.';
 	}

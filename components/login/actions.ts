@@ -46,6 +46,8 @@ function toUserMessage(error: unknown) {
 	switch (getErrorStatus(error)) {
 		case 401:
 			return 'Wrong email or password.';
+		case 429:
+			return 'Too many login attempts. Please wait a minute and try again.';
 		case 400:
 			return getErrorMessage(error) ?? 'Please check the form and try again.';
 		default:
