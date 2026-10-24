@@ -35,13 +35,15 @@ export type Paginated<T> = {
 	total: number;
 };
 
+export type OrderStatus = 'open' | 'closed';
+
 export type Order = {
 	id: string;
 	toy_id: string | null;
 	phone: string;
 	message: string | null;
 	details: string | null;
-	status: 'open' | 'closed';
+	status: OrderStatus;
 	created_at: string;
 	updated_at: string;
 };

@@ -5,7 +5,12 @@ import { redirect } from 'next/navigation';
 
 import { login } from '@/lib/api/auth';
 import { toUserMessage } from '@/lib/api/errors';
-import { ACCESS_TOKEN_COOKIE, safeRedirectPath } from '@/lib/auth';
+import {
+	ACCESS_TOKEN_COOKIE,
+	ADMIN_PATH,
+	LOGIN_PATH,
+	safeRedirectPath,
+} from '@/lib/auth';
 
 export type LoginFormState = {
 	error?: string;
@@ -18,7 +23,7 @@ export async function loginAction(
 ): Promise<LoginFormState> {
 	const email = String(formData.get('email') ?? '').trim();
 	const password = String(formData.get('password') ?? '');
-	const next = safeRedirectPath(formData.get('next'));
+	const next = safeRedirectPath(formData.get('next'), ADMIN_PATH);
 
 	if (!email || !password) {
 		return { error: 'Please enter your email and password.', email };
@@ -47,4 +52,9 @@ export async function loginAction(
 	}
 
 	redirect(next);
+}
+
+export async function logoutAction() {
+	(await cookies()).delete(ACCESS_TOKEN_COOKIE);
+	redirect(LOGIN_PATH);
 }

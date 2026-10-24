@@ -10,10 +10,16 @@ if (!API_URL) {
 
 type Query = Record<string, string | number | undefined>;
 
-async function request<T>(
-	method: 'GET' | 'POST',
+export type RequestOptions = {
+	query?: Query;
+	body?: unknown;
+	headers?: Record<string, string>;
+};
+
+export async function request<T>(
+	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
 	path: string,
-	{ query, body }: { query?: Query; body?: unknown } = {},
+	{ query, body, headers }: RequestOptions = {},
 ) {
 	const url = new URL(API_URL + path);
 	for (const [key, value] of Object.entries(query ?? {})) {
@@ -23,7 +29,9 @@ async function request<T>(
 	const response = await fetch(url, {
 		method,
 		headers:
-			body === undefined ? undefined : { 'Content-Type': 'application/json' },
+			body === undefined
+				? headers
+				: { ...headers, 'Content-Type': 'application/json' },
 		body: body === undefined ? undefined : JSON.stringify(body),
 	});
 

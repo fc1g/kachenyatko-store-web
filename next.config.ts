@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
 		agentFeedback: true,
 	},
 	cacheComponents: true,
+	async redirects() {
+		return [
+			{ source: '/admin', destination: '/admin/orders', permanent: false },
+		];
+	},
 	partialPrefetching: true,
 	turbopack: {
 		rules: {
