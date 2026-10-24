@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 
 import { DecorativeShape } from '@/components/decorative-shape';
 import { LoginForm } from '@/components/login/login-form';
-import { safeRedirectPath } from '@/lib/auth';
+import { ADMIN_PATH, safeRedirectPath } from '@/lib/auth';
 
 export const metadata: Metadata = {
 	title: 'Log in',
@@ -32,7 +32,7 @@ export default function LoginPage({ searchParams }: PageProps<'/login'>) {
 
 				<Suspense fallback={<LoginForm />}>
 					{searchParams.then(({ next }) => (
-						<LoginForm next={safeRedirectPath(next)} />
+						<LoginForm next={safeRedirectPath(next, ADMIN_PATH)} />
 					))}
 				</Suspense>
 			</div>
