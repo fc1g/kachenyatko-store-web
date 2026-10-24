@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { DecorativeShape } from '@/components/decorative-shape';
 import { ToyDetails, ToyDetailsSkeleton } from '@/components/toy/toy-details';
 import { getToy } from '@/lib/api/toys';
+import { baseOpenGraph } from '@/lib/site';
 
 const META_DESCRIPTION_MAX_LENGTH = 160;
 const ELLIPSIS = '...';
@@ -28,6 +29,7 @@ export async function generateMetadata({
 		title: toy.name,
 		description,
 		openGraph: {
+			...baseOpenGraph,
 			title: toy.name,
 			description,
 			images: image ? [{ url: image.url, alt: toy.name }] : undefined,
