@@ -11,7 +11,7 @@ export async function ToyOrder({ id }: { id: string }) {
 	const toy = await getToy(id);
 	if (!toy) notFound();
 
-	const image = toy.images.toSorted((a, b) => a.position - b.position)[0];
+	const image = toy.images.at(0);
 
 	return (
 		<div className="flex flex-col gap-8">

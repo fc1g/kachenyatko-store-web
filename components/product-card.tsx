@@ -34,7 +34,7 @@ export function ProductCard({
 	color,
 	orientation = 'vertical',
 }: ProductCardProps) {
-	const image = toy.images.toSorted((a, b) => a.position - b.position)[0];
+	const image = toy.images.at(0);
 	const horizontal = orientation === 'horizontal';
 
 	return (

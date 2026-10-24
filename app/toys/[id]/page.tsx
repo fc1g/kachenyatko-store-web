@@ -22,7 +22,7 @@ export async function generateMetadata({
 	const toy = await getToy(id);
 	if (!toy) notFound();
 
-	const image = toy.images.toSorted((a, b) => a.position - b.position)[0];
+	const image = toy.images.at(0);
 	const description = truncate(toy.description, META_DESCRIPTION_MAX_LENGTH);
 
 	return {

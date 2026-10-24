@@ -17,7 +17,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { Toy } from '@/lib/api/types';
 
 export function ToyGallery({ toy }: { toy: Pick<Toy, 'name' | 'images'> }) {
-	const images = toy.images.toSorted((a, b) => a.position - b.position);
+	const { images } = toy;
 
 	const [api, setApi] = useState<CarouselApi>();
 	const [selected, setSelected] = useState(0);
@@ -56,7 +56,7 @@ export function ToyGallery({ toy }: { toy: Pick<Toy, 'name' | 'images'> }) {
 									src={image.url}
 									alt={`${toy.name}, photo ${i + 1}`}
 									fill
-									priority={i === 0}
+									fetchPriority={i === 0 ? 'high' : undefined}
 									sizes="(min-width: 768px) 50vw, 100vw"
 									className="object-cover"
 								/>
