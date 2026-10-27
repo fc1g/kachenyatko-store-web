@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
 	allowedDevOrigins: ['192.168.*.*'],
 	images: {
 		remotePatterns: [
-			new URL('https://pub-6091cee1104040dea51a588c1a50513b.r2.dev/**'),
+			new URL('https://images.fc1g-lab.dev/**'),
 		],
 	},
 	experimental: {
