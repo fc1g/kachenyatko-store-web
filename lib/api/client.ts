@@ -26,13 +26,14 @@ export async function request<T>(
 		if (value !== undefined) url.searchParams.set(key, String(value));
 	}
 
+	const json = body !== undefined && !(body instanceof FormData);
+
 	const response = await fetch(url, {
 		method,
-		headers:
-			body === undefined
-				? headers
-				: { ...headers, 'Content-Type': 'application/json' },
-		body: body === undefined ? undefined : JSON.stringify(body),
+		headers: json
+			? { ...headers, 'Content-Type': 'application/json' }
+			: headers,
+		body: json ? JSON.stringify(body) : (body as FormData | undefined),
 	});
 
 	if (!response.ok) {
