@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { cn } from 'cn';
 
+import { AdminPagination } from '@/components/admin/admin-pagination';
 import { getOrders, ORDERS_PAGE_SIZE } from '@/lib/api/admin/orders';
 import { getToy } from '@/lib/api/toys';
 import type { OrderStatus, Toy } from '@/lib/api/types';
@@ -87,24 +88,11 @@ export async function OrderList({ status, page }: OrderListProps) {
 				))}
 			</div>
 
-			{totalPages > 1 && (
-				<nav
-					aria-label="Pagination"
-					className="flex items-center justify-between gap-4"
-				>
-					<PageLink href={page > 1 ? ordersHref(status, page - 1) : null}>
-						Previous
-					</PageLink>
-					<span className="text-sm text-muted-foreground">
-						Page {page} of {totalPages}
-					</span>
-					<PageLink
-						href={page < totalPages ? ordersHref(status, page + 1) : null}
-					>
-						Next
-					</PageLink>
-				</nav>
-			)}
+			<AdminPagination
+				page={page}
+				totalPages={totalPages}
+				href={page => ordersHref(status, page)}
+			/>
 		</div>
 	);
 }
@@ -115,30 +103,6 @@ async function getOrderToys(toyIds: (string | null)[]) {
 
 	return new Map(
 		toys.filter((toy): toy is Toy => toy !== null).map(toy => [toy.id, toy]),
-	);
-}
-
-function PageLink({
-	href,
-	children,
-}: {
-	href: string | null;
-	children: string;
-}) {
-	const className = 'rounded-md border px-4 py-2 font-medium';
-
-	if (!href) {
-		return (
-			<span aria-disabled="true" className={cn(className, 'opacity-40')}>
-				{children}
-			</span>
-		);
-	}
-
-	return (
-		<Link href={href} className={cn(className, 'hover:bg-muted')}>
-			{children}
-		</Link>
 	);
 }
 
