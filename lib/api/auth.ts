@@ -3,6 +3,7 @@ import 'server-only';
 import { ACCESS_TOKEN_COOKIE, getTokenExpiry } from '@/lib/auth';
 
 import { postWithCookies } from './client';
+import { clientIPHeaders } from './client-ip';
 import type { User } from './types';
 
 export type LoginInput = {
@@ -19,7 +20,11 @@ export type Session = {
 const ACCESS_TOKEN_PATTERN = new RegExp(`^${ACCESS_TOKEN_COOKIE}=([^;]+)`);
 
 export async function login(input: LoginInput): Promise<Session> {
-	const { data, cookies } = await postWithCookies<User>('/login', input);
+	const { data, cookies } = await postWithCookies<User>(
+		'/login',
+		input,
+		await clientIPHeaders(),
+	);
 
 	const accessToken = cookies
 		.map(cookie => cookie.match(ACCESS_TOKEN_PATTERN)?.[1])

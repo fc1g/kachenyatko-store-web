@@ -66,12 +66,23 @@ export async function getOne<T>(path: string): Promise<T | null> {
 	}
 }
 
-export async function post<T>(path: string, body: unknown): Promise<T> {
-	const { data } = await request<T>('POST', path, { body });
+export async function post<T>(
+	path: string,
+	body: unknown,
+	headers?: Record<string, string>,
+): Promise<T> {
+	const { data } = await request<T>('POST', path, { body, headers });
 	return data;
 }
 
-export async function postWithCookies<T>(path: string, body: unknown) {
-	const { data, response } = await request<T>('POST', path, { body });
+export async function postWithCookies<T>(
+	path: string,
+	body: unknown,
+	headers?: Record<string, string>,
+) {
+	const { data, response } = await request<T>('POST', path, {
+		body,
+		headers,
+	});
 	return { data, cookies: response.headers.getSetCookie() };
 }
