@@ -61,6 +61,7 @@ export type ApiErrorCode =
 export type ApiErrorBody = {
 	code: ApiErrorCode;
 	message: string;
+	request_id: string;
 };
 
 export type User = {

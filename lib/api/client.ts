@@ -8,6 +8,8 @@ if (!API_URL) {
 	throw new Error('Missing environment variable: API_URL');
 }
 
+const REQUEST_ID_HEADER = 'X-Request-Id';
+
 type Query = Record<string, string | number | undefined>;
 
 export type RequestOptions = {
@@ -38,7 +40,12 @@ export async function request<T>(
 
 	if (!response.ok) {
 		const error = await readJson<Partial<ApiErrorBody>>(response);
-		throw new ApiError(response.status, error?.code, error?.message);
+		throw new ApiError(
+			response.status,
+			error?.code,
+			error?.message,
+			error?.request_id ?? response.headers.get(REQUEST_ID_HEADER) ?? undefined,
+		);
 	}
 
 	return { data: (await readJson<T>(response)) as T, response };
