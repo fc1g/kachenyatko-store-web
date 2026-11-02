@@ -27,15 +27,30 @@ export async function ToyDetails({ id }: { id: string }) {
 				<ToyGallery toy={toy} />
 
 				<div className="flex flex-col gap-10">
-					<div className="flex flex-col items-start gap-6">
-						<h1 className="text-[2.5rem]/tight font-bold">{toy.name}</h1>
-						<Button
-							nativeButton={false}
-							render={<Link href={`/toys/${toy.id}/order`} />}
-							className="h-12 px-6 text-lg"
-						>
-							Order this toy
-						</Button>
+					<div className="flex flex-col items-start gap-4">
+						<div className="flex flex-col gap-1">
+							<Link
+								href={`/catalog/${toy.category.slug}`}
+								className="w-fit text-muted-foreground transition-colors hover:text-foreground"
+							>
+								{toy.category.name}
+							</Link>
+							<h1 className="text-[2.5rem]/tight font-bold">{toy.name}</h1>
+						</div>
+						<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+							<Button
+								nativeButton={false}
+								render={<Link href={`/toys/${toy.id}/order`} />}
+								className="h-12 self-start px-6 text-lg sm:self-auto"
+							>
+								Order this toy
+							</Button>
+							<p className="text-sm text-muted-foreground">
+								Made by hand to order.
+								<br />
+								We&apos;ll message you within 24 hours.
+							</p>
+						</div>
 					</div>
 
 					<section className="flex flex-col gap-4">
@@ -71,9 +86,15 @@ export function ToyDetailsSkeleton() {
 				<ToyGallerySkeleton />
 
 				<div className="flex flex-col gap-10">
-					<div className="flex flex-col gap-6">
-						<Skeleton className="h-12 w-3/4" />
-						<Skeleton className="h-12 w-44" />
+					<div className="flex flex-col gap-4">
+						<div className="flex flex-col gap-1">
+							<Skeleton className="h-6 w-32" />
+							<Skeleton className="h-12 w-3/4" />
+						</div>
+						<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+							<Skeleton className="h-12 w-44" />
+							<Skeleton className="h-10 w-56" />
+						</div>
 					</div>
 					<div className="flex flex-col gap-4">
 						<Skeleton className="h-8 w-40" />
