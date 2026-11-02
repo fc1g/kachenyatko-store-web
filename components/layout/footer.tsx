@@ -8,8 +8,8 @@ import { InstagramIcon } from '@/components/icons/instagram-icon';
 
 // TODO: replace placeholders with real contacts
 const contacts = {
-	phone: '+48 123 456 789',
-	email: 'mail@gmail.com',
+	phone: '+380 00 000 0000',
+	email: 'contact@example.com',
 	instagram: 'https://www.instagram.com/k.achenyatk.o',
 };
 
@@ -44,18 +44,8 @@ export function Footer() {
 
 				<div className="flex flex-col gap-8">
 					<p className="hidden font-semibold md:block">Contacts</p>
-					<a
-						href={`tel:${contacts.phone.replaceAll(' ', '')}`}
-						className="transition-opacity hover:opacity-70"
-					>
-						{contacts.phone}
-					</a>
-					<a
-						href={`mailto:${contacts.email}`}
-						className="transition-opacity hover:opacity-70"
-					>
-						{contacts.email}
-					</a>
+					<span title="Demo placeholder">{contacts.phone}</span>
+					<span title="Demo placeholder">{contacts.email}</span>
 					<a
 						href={contacts.instagram}
 						aria-label="Instagram"
