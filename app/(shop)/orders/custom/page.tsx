@@ -22,15 +22,12 @@ export default function CustomOrderPage() {
 			<div className="mx-auto flex max-w-2xl flex-col gap-8 px-4 md:px-12">
 				<div className="flex flex-col gap-4">
 					<h1 className="text-[2.5rem]/tight font-extrabold">
-						Dream it, we&apos;ll make it
+						Dream it, we&apos;ll knit it
 					</h1>
 					<p className="text-lg">
-						Every toy is unique in its own way, and yours can be truly one of a
-						kind. Tell us what you have in mind, and we&apos;re here to help
-						bring it to life. Once you send the request, we&apos;ll reach out on
-						a messenger at the phone number you leave, so don&apos;t worry about
-						getting every detail right now: we&apos;ll work it all out together.
-						Thank you for your trust!
+						Every toy is unique, and yours can be truly one of a kind. Tell us
+						what you have in mind and we&apos;ll message you within 24 hours to
+						work it all out together.
 					</p>
 				</div>
 
