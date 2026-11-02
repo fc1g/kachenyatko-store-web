@@ -20,10 +20,9 @@ export async function ToyOrder({ id }: { id: string }) {
 					Let&apos;s make it yours
 				</h1>
 				<p className="text-lg">
-					Once you place the order, we&apos;ll reach out to you on a messenger
-					at the phone number you leave. So don&apos;t worry if you miss
-					something now: we&apos;ll have time to talk everything through. Thank
-					you for your trust!
+					Leave your number and a few details. We&apos;ll message you within 24
+					hours to talk everything through, so don&apos;t worry about getting it
+					all right now.
 				</p>
 			</div>
 

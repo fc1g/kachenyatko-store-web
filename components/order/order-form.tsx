@@ -13,6 +13,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from '@/lib/instagram';
 
 import { createOrder } from './actions';
 import {
@@ -20,11 +21,6 @@ import {
 	MESSAGE_MAX_LENGTH,
 	type OrderFormState,
 } from './order-params';
-
-const PHONE_HINT = [
-	'We only use your number to talk about this order: no spam, no ads, and we never share it with anyone. Expect a message from us within 24 hours.',
-	"We'd be really grateful if this is your Telegram number. No Telegram? Just tell us in the comment below which messenger works best for you.",
-];
 
 const initialState: OrderFormState = { status: 'idle' };
 
@@ -56,7 +52,20 @@ export function OrderForm({ toyId }: { toyId?: string }) {
 			>
 				<h2 className="text-2xl font-semibold">Thank you for your order!</h2>
 				<p className="text-lg">
-					We&apos;ll message you within 24 hours to talk through the details.
+					Thank you for your trust! We&apos;ll message you within 24 hours to
+					talk through the details.
+				</p>
+				<p>
+					Prefer Instagram? Send us a message at{' '}
+					<a
+						href={INSTAGRAM_URL}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="font-semibold underline underline-offset-4 transition-opacity hover:opacity-70"
+					>
+						@{INSTAGRAM_HANDLE}
+					</a>
+					, and we&apos;ll reply there.
 				</p>
 				<Button
 					nativeButton={false}
@@ -84,17 +93,15 @@ export function OrderForm({ toyId }: { toyId?: string }) {
 							render={
 								<button
 									type="button"
-									aria-label={PHONE_HINT.join(' ')}
+									aria-label="Why we need your number"
 									className="text-muted-foreground transition-colors hover:text-foreground"
 								/>
 							}
 						>
 							<InfoIcon className="size-4" />
 						</TooltipTrigger>
-						<TooltipContent className="max-w-sm flex-col items-start gap-2 px-4 py-3 text-sm">
-							{PHONE_HINT.map(paragraph => (
-								<p key={paragraph}>{paragraph}</p>
-							))}
+						<TooltipContent className="max-w-xs px-4 py-3 text-sm">
+							We only use it to discuss this order. No spam, never shared.
 						</TooltipContent>
 					</Tooltip>
 				</div>
@@ -109,10 +116,14 @@ export function OrderForm({ toyId }: { toyId?: string }) {
 					defaultValue={error?.values.phone}
 					aria-invalid={error?.field === 'phone' || undefined}
 					aria-describedby={
-						error?.field === 'phone' ? 'order-error' : undefined
+						error?.field === 'phone' ? 'phone-hint order-error' : 'phone-hint'
 					}
 					className="h-11 text-base md:text-base"
 				/>
+				<p id="phone-hint" className="text-sm text-muted-foreground">
+					Telegram preferred. Rather chat on Instagram or another messenger?
+					Mention it in the comment.
+				</p>
 			</div>
 
 			<div className="flex flex-col gap-2">

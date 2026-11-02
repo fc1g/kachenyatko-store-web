@@ -5,12 +5,13 @@ import logo from '@/public/logo.jpg';
 
 import { navLinks } from './nav-links';
 import { InstagramIcon } from '@/components/icons/instagram-icon';
+import { INSTAGRAM_URL } from '@/lib/instagram';
 
 // TODO: replace placeholders with real contacts
 const contacts = {
 	phone: '+380 00 000 0000',
 	email: 'contact@example.com',
-	instagram: 'https://www.instagram.com/k.achenyatk.o',
+	instagram: INSTAGRAM_URL,
 };
 
 export function Footer() {
