@@ -5,9 +5,10 @@ import { notFound } from 'next/navigation';
 import { DecorativeShape } from '@/components/decorative-shape';
 import { ToyDetails, ToyDetailsSkeleton } from '@/components/toy/toy-details';
 import { getToy } from '@/lib/api/toys';
-import { baseOpenGraph } from '@/lib/site';
+import { baseOpenGraph, SITE_IMAGE } from '@/lib/site';
 
 const META_DESCRIPTION_MAX_LENGTH = 160;
+const SOCIAL_DESCRIPTION_MAX_LENGTH = 125;
 const ELLIPSIS = '...';
 
 function truncate(text: string, maxLength: number) {
@@ -24,6 +25,11 @@ export async function generateMetadata({
 
 	const image = toy.images.at(0);
 	const description = truncate(toy.description, META_DESCRIPTION_MAX_LENGTH);
+	const socialDescription = truncate(
+		toy.description,
+		SOCIAL_DESCRIPTION_MAX_LENGTH,
+	);
+	const images = [image ? { url: image.url, alt: toy.name } : SITE_IMAGE];
 
 	return {
 		title: toy.name,
@@ -31,8 +37,14 @@ export async function generateMetadata({
 		openGraph: {
 			...baseOpenGraph,
 			title: toy.name,
-			description,
-			images: image ? [{ url: image.url, alt: toy.name }] : undefined,
+			description: socialDescription,
+			images,
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: toy.name,
+			description: socialDescription,
+			images,
 		},
 	};
 }

@@ -5,7 +5,9 @@ import { cn } from 'cn';
 import {
 	baseOpenGraph,
 	SITE_DESCRIPTION,
+	SITE_IMAGE,
 	SITE_NAME,
+	SITE_TITLE,
 	SITE_URL,
 } from '@/lib/site';
 import { Providers } from './providers';
@@ -17,7 +19,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
 	title: {
-		default: SITE_NAME,
+		default: SITE_TITLE,
 		template: `%s | ${SITE_NAME}`,
 	},
 	description: SITE_DESCRIPTION,
@@ -25,13 +27,15 @@ export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
 	openGraph: {
 		...baseOpenGraph,
-		title: SITE_NAME,
+		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
+		images: [SITE_IMAGE],
 	},
 	twitter: {
 		card: 'summary_large_image',
-		title: SITE_NAME,
+		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
+		images: [SITE_IMAGE],
 	},
 };
 
