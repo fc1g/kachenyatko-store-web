@@ -3,9 +3,8 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
 	allowedDevOrigins: ['192.168.*.*'],
 	images: {
-		remotePatterns: [
-			new URL('https://images.fc1g-lab.dev/**'),
-		],
+		remotePatterns: [new URL('https://images.fc1g-lab.dev/**')],
+		minimumCacheTTL: 2678400,
 	},
 	experimental: {
 		agentFeedback: true,
